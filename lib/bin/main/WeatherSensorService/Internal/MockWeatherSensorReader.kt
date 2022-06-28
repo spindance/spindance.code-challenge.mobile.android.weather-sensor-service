@@ -1,72 +1,70 @@
-//  //
-//  // SpinDance
-//  // Weather Sensor Service
-//  //
-//  // Copyright © 2022 SpinDance. All rights reserved.
-//  //
+ //
+ // SpinDance
+ // Weather Sensor Service
+ //
+ // Copyright © 2022 SpinDance. All rights reserved.
+ //
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import java.util.Timer
+import kotlin.concurrent.*
+import kotlin.random.Random
+import java.time.LocalDateTime
 
-//  private enum class Constants {
-//      companion object {
-//          var readerInterval: UInt = 1,
-//          var temperatureRange = -40.0...40.0,
-//          var humidityRange = 0.0...100.0,
-//          var pressureRange = 95.0...105.0;
-//      }
-//  }
+private class Constants {
+    companion object {
+        var READER_INTERVAL: UInt = 1U
+        val TEMPERATURE_RANGE : ClosedRange<Double> = -40.0..40.0
+        val HUMIDITY_RANGE : ClosedRange<Double> = 0.0..100.0
+        val PRESSURE_RANGE : ClosedRange<Double> = 95.0..105.0
+    }
+}
 
-//  class MockWeatherSensorReader: WeatherSensorReaderType {
-//      private var timer: Timer?
+class MockWeatherSensorReader: WeatherSensorReaderType {
+     
+    private var timer: Timer? = null
 
-//      private var readerInterval = Constants.readerInterval {
-//          didSet {
-//              guard oldValue != readerInterval else { return }
+    override var readerInterval : UInt = Constants.READER_INTERVAL
+        set(value) {
+            if ( readerInterval != value){
+                if (timer != null){
+                    startSensorReadings()
+                }
+            }
+        }
 
-//              // If we were reporting, restart.
-//              if timer != nil {
-//                  startSensorReadings()
-//              }
-//          }
-//      }
+    override var sensorReadingsPublisher : Channel<WeatherSensorReading> = Channel<WeatherSensorReading>()
 
-//      private var sensorReadingsSubject = PassthroughSubject<WeatherSensorReadingType, Never>()
+    override fun set(readingInterval: UInt) {
+        if (readingInterval >= 1U && readingInterval <= UInt.MAX_VALUE) { 
+            readerInterval = readingInterval 
+        }
+    }
 
-//      var sensorReadingsPublisher: AnyPublisher<WeatherSensorReadingType, Never> {
-//          sensorReadingsSubject.eraseToAnyPublisher()
-//      }
+    override fun startSensorReadings() {
+         stopSensorReadings()
 
-//      fun set(readingInterval: UInt) {
-//          guard 1...UInt.max ~= readingInterval else { return }
-//          readerInterval = readingInterval
-//      }
+         // Report the first reading immediately, then start the timer
+         reportSensorReadings()
 
-//      fun startSensorReadings() {
-//          stopSensorReadings()
+         timer = fixedRateTimer("default", false, 0L, readerInterval){
+            reportSensorReadings()
+         }
+     }
 
-//          // Report the first reading immediately, then start the timer
-//          reportSensorReadings()
+    override fun stopSensorReadings() {
+        timer?.cancel()
+        timer = null
+     }
 
-//          timer = Timer.scheduledTimer(
-//              withTimeInterval: TimeInterval(readerInterval),
-//              repeats: true
-//          ) { [weak self] _ in
-//              guard let self = self else { return }
-//              self.reportSensorReadings()
-//          }
-//      }
-
-//      fun stopSensorReadings() {
-//          timer?.invalidate()
-//          timer = nil
-//      }
-
-//      private fun reportSensorReadings() {
-//          sensorReadingsSubject.send(
-//              WeatherSensorReading(
-//                  temperature: Double.random(in: Constants.temperatureRange),
-//                  humidity: Double.random(in: Constants.humidityRange),
-//                  pressure: Double.random(in: Constants.pressureRange),
-//                  time: Date()
-//              )
-//          )
-//      }
-//  }
+     private suspend fun reportSensorReadings() {
+         sensorReadingsPublisher.send(
+             WeatherSensorReading(
+                Random.nextDouble(-40.0, 40.0),
+                Random.nextDouble(0.0,100.0),
+                Random.nextDouble(95.0,105.0),
+                LocalDateTime.now()
+             )
+         )
+     }
+ }

@@ -4,14 +4,15 @@
 //
 // Copyright © 2022 SpinDance. All rights reserved.
 //
-import java.util.concurrent.Flow.Publisher as Publisher;
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 
 public interface WeatherSensorReaderType {
      /// The time interval in seconds at which weather sensor readings are published
      var readerInterval: UInt
 
      /// Publishes ``WeatherSensorReadingType`` every ``readerInterval`` seconds
-     var sensorReadingsPublisher: Publisher<WeatherSensorReadingType>
+     var sensorReadingsPublisher: Channel<WeatherSensorReading>
  
      /// Sets readerInterval; must be greater than 0
      fun set(readingInterval: UInt)
@@ -21,5 +22,4 @@ public interface WeatherSensorReaderType {
  
      /// Stop the generation of weather sensor readings
      fun stopSensorReadings()
-
 }
