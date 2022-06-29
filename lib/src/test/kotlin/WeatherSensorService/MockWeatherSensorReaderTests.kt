@@ -11,6 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import WeatherSensorReaderType
 import MockWeatherSensorReader
+import kotlinx.coroutines.flow.collectLatest
 
 class MockWeatherSensorReaderTests {
     @Test fun test_weatherSensorServiceBehavior(){
@@ -41,4 +42,12 @@ class MockWeatherSensorReaderTests {
         sut.set(readingInterval = 1U)
         assertEquals(1U, sut.readerInterval)
     }
+
+    // @Test suspend fun test_validSensorReadings(){
+    //     var sut = MockWeatherSensorReader()
+    //     sut.sensorReadingsPublisher.collectLatest{value -> println(value)}
+    //     sut.startSensorReadings()
+    //     sut.stopSensorReadings()
+    //     println(sut.sensorReadingsPublisher)
+    // }
 }
