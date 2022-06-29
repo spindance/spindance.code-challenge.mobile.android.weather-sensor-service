@@ -5,17 +5,30 @@
 // Copyright © 2022 SpinDance. All rights reserved.
 //
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.text.DecimalFormat
 
-public interface WeatherSensorReadingType {
+public abstract class WeatherSensorReadingType() {
     /// Temperature in degrees Celcius
-    var temperature: Double
+    abstract var temperature: Double
 
     /// Percent humidity
-    var humidity: Double
+    abstract var humidity: Double
 
     /// Barometric pressure in kiloPascals
-    var pressure: Double
+    abstract var pressure: Double
 
     /// Reading timestamp
-    var time: LocalDateTime
+    abstract var time: LocalDateTime
+
+    private val timestampFormatter : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm:ss.SSS")
+
+    //override toString
+    override fun toString() : String
+    {
+        val temp = this.temperature.toStringTwoDecimalPlaces
+        val humidity = this.humidity.toStringTwoDecimalPlaces
+        val time = this.time.format(timestampFormatter)
+        return "$time $temp°, $humidity%, $pressure kPa" //will need to add localization
+    }
 }

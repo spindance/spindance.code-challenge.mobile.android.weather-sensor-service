@@ -10,4 +10,4 @@ data class WeatherSensorReading(
     override var temperature: Double,
     override var humidity: Double,
     override var pressure: Double,
-    override var time: LocalDateTime) : WeatherSensorReadingType
+    override var time: LocalDateTime) : WeatherSensorReadingType()
