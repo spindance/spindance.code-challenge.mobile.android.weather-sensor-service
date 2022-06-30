@@ -7,8 +7,8 @@
 
 data class WeatherSensorService {
     companion object {
-        public val shared = WeatherSensorService()
+        public var shared = WeatherSensorService()
     }
-    public val reader: WeatherSensorReaderType = MockWeatherSensorReader()
+    public var reader: WeatherSensorReaderType = MockWeatherSensorReader()
     private init() {}
 }

@@ -4,25 +4,30 @@
 //
 // Copyright © 2022 SpinDance. All rights reserved.
 //
-import java.time.format.DateTimeFormatter;
 
-private val timestampFormatter : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm:ss.SSS").withZone(TimeZone.current)
-
-val WeatherSensorReadingType.description: WeatherSensorReadingType 
+val WeatherSensorReadingType.description: WeatherSensorReadingType {
     get() {
         var temp = temperature.toStringTwoDecimalPlaces
         var humidity = humidity.toStringTwoDecimalPlaces
-        var time = time.format(timestampFormatter)
-        return "\(time): \(temp)°, \(humidity)%, \(pressure)kPa" //will need to add localization
+        var time = DateFormatter.timestampFormatter.string(from: time)
+        return NSLocalizedString("\(time): \(temp)°, \(humidity)%, \(pressure)kPa", comment: "")
     }
+}
 
-
-val Double.toStringTwoDecimalPlaces: String 
+val DateFormatter {
     get(){
-        return String(format: "%.2f", this) 
+        var timestampFormatter: DateFormatter = {
+            var formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-dd-MM HH:mm:ss.SSS"
+            formatter.timeZone = TimeZone.current
+            return formatter
+        }
     }
+}
 
-val Double.toStringFourDecimalPlaces: String 
+var Double {
     get(){
-        return String(format: "%.4f", this) 
+        var toStringTwoDecimalPlaces: String { String(format: "%.2f", this) }
+        var toStringFourDecimalPlaces: String { String(format: "%.4f", this) }
     }
+}

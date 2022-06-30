@@ -4,7 +4,7 @@
 //
 // Copyright © 2022 SpinDance. All rights reserved.
 //
-import java.util.*
+
 public interface WeatherSensorReadingType: CustomStringConvertible {
     /// Temperature in degrees Celcius
     var temperature: Double

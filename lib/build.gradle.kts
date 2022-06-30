@@ -18,6 +18,7 @@ repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
+
 dependencies {
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
