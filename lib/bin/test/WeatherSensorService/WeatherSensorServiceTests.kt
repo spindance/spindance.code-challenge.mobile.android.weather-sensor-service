@@ -9,11 +9,10 @@ package WeatherSensorService
 import WeatherSensorService
 import WeatherSensorReaderType
 import kotlin.test.Test
-import kotlin.test.assertTrue
 
 final class WeatherSensorServiceTests {
     /// Simply verify the singleton supports a ``WeatherSensorReaderType``
     @Test fun testWeatherSensorService() {
-       assertTrue(WeatherSensorService.shared.reader is WeatherSensorReaderType)
+        WeatherSensorService.shared.reader as WeatherSensorReaderType
     }
 }

@@ -46,7 +46,7 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
          // Report the first reading immediately, then start the timer
          reportSensorReadings()
 
-        timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = (readerInterval * 1000U).toLong()){
+        timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = readerInterval.toLong()){
             reportSensorReadings()
         }
      }
