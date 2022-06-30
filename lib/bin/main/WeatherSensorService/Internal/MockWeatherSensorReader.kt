@@ -4,9 +4,8 @@
  //
  // Copyright © 2022 SpinDance. All rights reserved.
  //
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 import java.util.Timer
 import kotlin.concurrent.*
 import kotlin.random.Random
@@ -26,15 +25,17 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
     private var timer: Timer? = null
 
     override var readerInterval : UInt = Constants.READER_INTERVAL
-        
-    
-    private val flow: MutableSharedFlow<WeatherSensorReading> = MutableSharedFlow<WeatherSensorReading>()
-    override var sensorReadingsPublisher : SharedFlow<WeatherSensorReading> = flow.asSharedFlow()
-    
-    override fun set(readingInterval: UInt) {
-        if (readingInterval != readerInterval && timer != null){
-            startSensorReadings()
+        set(value) {
+            if ( readerInterval != value){
+                if (timer != null){
+                    startSensorReadings()
+                }
+            }
         }
+
+    override var sensorReadingsPublisher : Channel<WeatherSensorReading> = Channel<WeatherSensorReading>()
+
+    override fun set(readingInterval: UInt) {
         if (readingInterval >= 1U && readingInterval <= UInt.MAX_VALUE) { 
             readerInterval = readingInterval 
         }
@@ -46,9 +47,9 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
          // Report the first reading immediately, then start the timer
          reportSensorReadings()
 
-        timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = readerInterval.toLong()){
+         timer = fixedRateTimer("default", false, 0L, readerInterval){
             reportSensorReadings()
-        }
+         }
      }
 
     override fun stopSensorReadings() {
@@ -56,8 +57,8 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
         timer = null
      }
 
-     private fun reportSensorReadings() {
-         flow.tryEmit(
+     private suspend fun reportSensorReadings() {
+         sensorReadingsPublisher.send(
              WeatherSensorReading(
                 Random.nextDouble(-40.0, 40.0),
                 Random.nextDouble(0.0,100.0),
