@@ -52,14 +52,12 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
      }
 
     override fun stopSensorReadings() {
-        println("stop timer")
         timer?.cancel()
         timer = null
      }
 
      private fun reportSensorReadings() {
          flow.tryEmit(
-            // println(
              WeatherSensorReading(
                 Random.nextDouble(-40.0, 40.0),
                 Random.nextDouble(0.0,100.0),
