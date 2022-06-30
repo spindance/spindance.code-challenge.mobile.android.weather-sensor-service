@@ -28,7 +28,7 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
     override var readerInterval : UInt = Constants.READER_INTERVAL
         
     
-    private val flow: MutableSharedFlow<WeatherSensorReading> = MutableSharedFlow<WeatherSensorReading>(replay = 1)
+    private val flow: MutableSharedFlow<WeatherSensorReading> = MutableSharedFlow<WeatherSensorReading>()
     override var sensorReadingsPublisher : SharedFlow<WeatherSensorReading> = flow.asSharedFlow()
     
     override fun set(readingInterval: UInt) {
@@ -52,14 +52,12 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
      }
 
     override fun stopSensorReadings() {
-        println("stop timer")
         timer?.cancel()
         timer = null
      }
 
      private fun reportSensorReadings() {
          flow.tryEmit(
-            // println(
              WeatherSensorReading(
                 Random.nextDouble(-40.0, 40.0),
                 Random.nextDouble(0.0,100.0),
