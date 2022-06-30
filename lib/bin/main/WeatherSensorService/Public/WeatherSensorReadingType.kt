@@ -4,9 +4,8 @@
 //
 // Copyright © 2022 SpinDance. All rights reserved.
 //
-import java.time.LocalDateTime
-
-public interface WeatherSensorReadingType {
+import java.util.*
+public interface WeatherSensorReadingType: CustomStringConvertible {
     /// Temperature in degrees Celcius
     var temperature: Double
 
@@ -17,5 +16,5 @@ public interface WeatherSensorReadingType {
     var pressure: Double
 
     /// Reading timestamp
-    var time: LocalDateTime
+    var time: Date
 }
