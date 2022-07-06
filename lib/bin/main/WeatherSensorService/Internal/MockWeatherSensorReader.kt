@@ -4,7 +4,7 @@
  //
  // Copyright © 2022 SpinDance. All rights reserved.
  //
- 
+
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 
 private class Constants {
     companion object {
-        var READER_INTERVAL: UInt = 1U
+        val READING_INTERVAL: UInt = 1U
         val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
         val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
         val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
@@ -26,14 +26,14 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
      
     private var timer: Timer? = null
 
-    override var readerInterval : UInt = Constants.READER_INTERVAL
+    override var readingInterval: UInt = Constants.READING_INTERVAL
         
     private val flow: MutableSharedFlow<WeatherSensorReading> = MutableSharedFlow<WeatherSensorReading>(replay = 1)
-    override var sensorReaderFlow : SharedFlow<WeatherSensorReading> = flow.asSharedFlow()
+    override var sensorReaderFlow: SharedFlow<WeatherSensorReading> = flow.asSharedFlow()
     
     override fun set(readingInterval: UInt) {
-        if (readingInterval != readerInterval && readingInterval >= 1U && readingInterval <= UInt.MAX_VALUE) { 
-            readerInterval = readingInterval 
+        if (readingInterval != this.readingInterval && readingInterval >= 1U && readingInterval <= UInt.MAX_VALUE) { 
+            this.readingInterval = readingInterval 
             if(timer != null){
                 startSensorReadings()
             }
@@ -46,7 +46,7 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
          // Report the first reading immediately, then start the timer
          reportSensorReadings()
 
-        timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = (readerInterval * 1000U).toLong()){
+        timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = (readingInterval * 1000U).toLong()){
             reportSensorReadings()
         }
      }

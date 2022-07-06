@@ -9,14 +9,14 @@ import java.time.LocalDateTime
 
 public interface WeatherSensorReadingType {
     /// Temperature in degrees Celcius
-    var temperature: Double
+    val temperature: Double
 
     /// Percent humidity
-    var humidity: Double
+    val humidity: Double
 
     /// Barometric pressure in kiloPascals
-    var pressure: Double
+    val pressure: Double
 
     /// Reading timestamp
-    var time: LocalDateTime
+    val time: LocalDateTime
 }
