@@ -37,3 +37,6 @@ hs_err_pid*
 lib/bin 
 # Ignore Gradle build output directory
 build
+
+# Ignore DS_Store
+.DS_Store
