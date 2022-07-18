@@ -14,12 +14,10 @@ import kotlin.random.Random
 import java.time.LocalDateTime
 
 private class Constants {
-    companion object {
-        val READING_INTERVAL: UInt = 1U
-        val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
-        val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
-        val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
-    }
+    val READING_INTERVAL: UInt = 1U
+    val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
+    val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
+    val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
 }
 
 class MockWeatherSensorReader: WeatherSensorReaderType {
@@ -34,7 +32,7 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
     override fun set(readingInterval: UInt) {
         if (readingInterval != this.readingInterval && readingInterval >= 1U && readingInterval <= UInt.MAX_VALUE) { 
             this.readingInterval = readingInterval 
-            if(timer != null){
+            if (timer != null) {
                 startSensorReadings()
             }
         }
