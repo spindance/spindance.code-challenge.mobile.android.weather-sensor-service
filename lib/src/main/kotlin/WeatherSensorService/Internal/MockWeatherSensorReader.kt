@@ -14,15 +14,19 @@ import kotlin.random.Random
 import java.time.LocalDateTime
 
 private class Constants {
-    val READING_INTERVAL: UInt = 1U
-    val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
-    val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
-    val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
+    companion object {
+        val READING_INTERVAL: UInt = 1U
+        val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
+        val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
+        val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
+    }
 }
 
 class MockWeatherSensorReader: WeatherSensorReaderType {
      
     private var timer: Timer? = null
+
+    private var waveLocation: Int = 1
 
     override var readingInterval: UInt = Constants.READING_INTERVAL
         
@@ -39,10 +43,10 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
     }
 
     override fun startSensorReadings() {
-         stopSensorReadings()
+        stopSensorReadings()
 
-         // Report the first reading immediately, then start the timer
-         reportSensorReadings()
+        // Report the first reading immediately, then start the timer
+        reportSensorReadings()
 
         timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = (readingInterval * 1000U).toLong()){
             reportSensorReadings()
@@ -57,11 +61,15 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
      private fun reportSensorReadings() {
          flow.tryEmit(
              WeatherSensorReading(
-                Random.nextDouble(-40.0, 40.0),
-                Random.nextDouble(0.0,100.0),
-                Random.nextDouble(95.0,105.0),
+                GenerateTemperatureReadings((waveLocation/100.0),-40.0..40.0),
+                GenerateTemperatureReadings((waveLocation/100.0),0.0..100.0),
+                GenerateTemperatureReadings((waveLocation/100.0),95.0..105.0),
                 LocalDateTime.now()
              )
          )
+         if ( waveLocation === 100) {
+             waveLocation = 1
+            }
+        waveLocation++
      }
  }
