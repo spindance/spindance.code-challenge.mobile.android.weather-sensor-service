@@ -61,9 +61,9 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
      private fun reportSensorReadings() {
          flow.tryEmit(
              WeatherSensorReading(
-                GenerateTemperatureReadings((waveLocation/100.0),-40.0..40.0),
-                GenerateTemperatureReadings((waveLocation/100.0),0.0..100.0),
-                GenerateTemperatureReadings((waveLocation/100.0),95.0..105.0),
+                GenerateTemperatureReadings((waveLocation/100.0),Constants.TEMPERATURE_RANGE),
+                GenerateTemperatureReadings((waveLocation/100.0),Constants.HUMIDITY_RANGE),
+                GenerateTemperatureReadings((waveLocation/100.0),Constants.PRESSURE_RANGE),
                 LocalDateTime.now()
              )
          )
