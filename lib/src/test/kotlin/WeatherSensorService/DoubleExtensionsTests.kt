@@ -14,11 +14,11 @@ import toStringTwoDecimalPlaces
 
 class DoubleExtensionsTests {
 
-    @Test fun test_roundToTwoDecimals(){
+    @Test fun test_roundToTwoDecimals() {
         assertEquals("10.23", 10.23453.toStringTwoDecimalPlaces)
     }
 
-    @Test fun test_roundToFourDecimals(){
+    @Test fun test_roundToFourDecimals() {
         assertEquals("10.2345", 10.23453.toStringFourDecimalPlaces)
     }
 } 

@@ -13,20 +13,18 @@ import kotlin.concurrent.*
 import kotlin.random.Random
 import java.time.LocalDateTime
 
-private class Constants {
-    companion object {
-        val READING_INTERVAL: UInt = 1U
-        val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
-        val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
-        val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
-    }
+private object Constants {
+    val READING_INTERVAL: UInt = 1U
+    val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
+    val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
+    val PRESSURE_RANGE: ClosedRange<Double> = 95.0..105.0
 }
 
 class MockWeatherSensorReader: WeatherSensorReaderType {
      
     private var timer: Timer? = null
 
-    private var waveLocation: Int = 1
+    private var waveLocation: Int = 0
 
     override var readingInterval: UInt = Constants.READING_INTERVAL
         
@@ -51,25 +49,26 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
         timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = (readingInterval * 1000U).toLong()){
             reportSensorReadings()
         }
-     }
+    }
 
     override fun stopSensorReadings() {
         timer?.cancel()
         timer = null
-     }
+    }
 
      private fun reportSensorReadings() {
-         flow.tryEmit(
-             WeatherSensorReading(
-                GenerateTemperatureReadings((waveLocation/100.0),Constants.TEMPERATURE_RANGE),
-                GenerateTemperatureReadings((waveLocation/100.0),Constants.HUMIDITY_RANGE),
-                GenerateTemperatureReadings((waveLocation/100.0),Constants.PRESSURE_RANGE),
+        val wavePercentage = waveLocation/100.0
+        flow.tryEmit(
+            WeatherSensorReading(
+                Constants.TEMPERATURE_RANGE.calculateSineWaveReading(wavePercentage),
+                Constants.HUMIDITY_RANGE.calculateSineWaveReading(wavePercentage),
+                Constants.PRESSURE_RANGE.calculateSineWaveReading(wavePercentage),
                 LocalDateTime.now()
              )
-         )
-         if ( waveLocation === 100) {
-             waveLocation = 1
-            }
+        )
+        if (waveLocation == 100) {
+            waveLocation = 0
+        }
         waveLocation++
-     }
+    }
  }

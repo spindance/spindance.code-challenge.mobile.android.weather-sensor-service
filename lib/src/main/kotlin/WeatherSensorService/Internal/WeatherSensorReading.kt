@@ -17,7 +17,7 @@ data class WeatherSensorReading(
         
         private val timestampFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm:ss.SSS")
 
-        //override toString
+        // override toString
         override fun toString(): String
         {
             val temp = this.temperature.toStringTwoDecimalPlaces

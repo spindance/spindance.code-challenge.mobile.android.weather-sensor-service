@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.*
 
 class MockWeatherSensorReaderTests {
-    @Test fun test_weatherSensorServiceBehavior(){
+    @Test fun test_weatherSensorServiceBehavior() {
         var sut: WeatherSensorReaderType = MockWeatherSensorReader()
         sut.set(readingInterval = 1U)
         var newInterval = sut.readingInterval + 1U

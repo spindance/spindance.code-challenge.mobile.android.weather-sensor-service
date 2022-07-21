@@ -1,5 +1,5 @@
-# spindance.code-challenge.mobile.android.weather-sensor-service-package
-Kotlin Package implementing a singleton service that provides access to a weather sensor reader.
+# spindance.code-challenge.mobile.android.weather-sensor-service
+Kotlin library implementing a singleton service that provides access to a weather sensor reader.
 
 ## How to Add the library to another project
 1. Copy the `lib.jar` file in `lib/build/libs` into the `app\libs` directory of your new project
