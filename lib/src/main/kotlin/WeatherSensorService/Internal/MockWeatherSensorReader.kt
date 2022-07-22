@@ -13,7 +13,7 @@ import kotlin.concurrent.*
 import kotlin.random.Random
 import java.time.LocalDateTime
 
-private class Constants {
+private object Constants {
     val READING_INTERVAL: UInt = 1U
     val TEMPERATURE_RANGE: ClosedRange<Double> = -40.0..40.0
     val HUMIDITY_RANGE: ClosedRange<Double> = 0.0..100.0
@@ -23,6 +23,8 @@ private class Constants {
 class MockWeatherSensorReader: WeatherSensorReaderType {
      
     private var timer: Timer? = null
+
+    private var waveLocation: Int = 0
 
     override var readingInterval: UInt = Constants.READING_INTERVAL
         
@@ -39,29 +41,34 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
     }
 
     override fun startSensorReadings() {
-         stopSensorReadings()
+        stopSensorReadings()
 
-         // Report the first reading immediately, then start the timer
-         reportSensorReadings()
+        // Report the first reading immediately, then start the timer
+        reportSensorReadings()
 
         timer = fixedRateTimer(name="SensorReadingsTimer", daemon = false, initialDelay = 0L, period = (readingInterval * 1000U).toLong()){
             reportSensorReadings()
         }
-     }
+    }
 
     override fun stopSensorReadings() {
         timer?.cancel()
         timer = null
-     }
+    }
 
      private fun reportSensorReadings() {
-         flow.tryEmit(
-             WeatherSensorReading(
-                Random.nextDouble(-40.0, 40.0),
-                Random.nextDouble(0.0,100.0),
-                Random.nextDouble(95.0,105.0),
+        val wavePercentage = waveLocation/100.0
+        flow.tryEmit(
+            WeatherSensorReading(
+                Constants.TEMPERATURE_RANGE.calculateSineWaveReading(wavePercentage),
+                Constants.HUMIDITY_RANGE.calculateSineWaveReading(wavePercentage),
+                Constants.PRESSURE_RANGE.calculateSineWaveReading(wavePercentage),
                 LocalDateTime.now()
              )
-         )
-     }
+        )
+        waveLocation++
+        if (waveLocation == 101) {
+            waveLocation = 0
+        }
+    }
  }
