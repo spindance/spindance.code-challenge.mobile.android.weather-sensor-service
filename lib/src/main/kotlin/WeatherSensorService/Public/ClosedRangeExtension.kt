@@ -13,7 +13,7 @@
     // Will be between -1 and 1 with the value determined based on the completion value of cyclePercentage
     val coefficient = sin(2 * Math.PI * cyclePercentage)
  
-    // median of the amplitude
+    // Median of the amplitude
     val median = abs(endInclusive - start) / 2
  
     // Applies the coefficient and median amplitude to create a sin wave based around the range provided
