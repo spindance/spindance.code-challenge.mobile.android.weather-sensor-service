@@ -66,9 +66,9 @@ class MockWeatherSensorReader: WeatherSensorReaderType {
                 LocalDateTime.now()
              )
         )
-        if (waveLocation == 100) {
+        waveLocation++
+        if (waveLocation == 101) {
             waveLocation = 0
         }
-        waveLocation++
     }
  }

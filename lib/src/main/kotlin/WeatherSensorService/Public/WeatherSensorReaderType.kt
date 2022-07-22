@@ -8,18 +8,18 @@
 import kotlinx.coroutines.flow.SharedFlow
 
 public interface WeatherSensorReaderType {
-     // The time interval in seconds at which weather sensor readings are published
+     /** The time interval in seconds at which weather sensor readings are published */
      val readingInterval: UInt
 
-     // Publishes WeatherSensorReadingType every readerInterval seconds
+     /** Publishes WeatherSensorReadingType every readerInterval seconds */
      val sensorReaderFlow: SharedFlow<WeatherSensorReading>
  
-     // Sets readerInterval; must be greater than 0
+     /** Sets readerInterval; must be greater than 0 */
      fun set(readingInterval: UInt)
  
-     // Starts the indefinite generation of weather sensor readings
+     /** Starts the indefinite generation of weather sensor readings */
      fun startSensorReadings()
  
-     // Stop the generation of weather sensor readings
+     /** Stop the generation of weather sensor readings */
      fun stopSensorReadings()
 }

@@ -14,9 +14,9 @@
     val coefficient = sin(2 * Math.PI * cyclePercentage)
  
     // median of the amplitude
-    val median = abs(this.endInclusive - this.start) / 2
+    val median = abs(endInclusive - start) / 2
  
     // Applies the coefficient and median amplitude to create a sin wave based around the range provided
-    return this.start + median + coefficient * median
+    return start + median + (coefficient * median)
 }
  

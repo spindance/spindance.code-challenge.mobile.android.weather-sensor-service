@@ -12,7 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 final class WeatherSensorServiceTests {
-    // Simply verify the singleton supports a WeatherSensorReaderType
+    /** Simply verify the singleton supports a WeatherSensorReaderType */
     @Test fun testWeatherSensorService() {
        assertTrue(WeatherSensorService.reader is WeatherSensorReaderType)
     }
