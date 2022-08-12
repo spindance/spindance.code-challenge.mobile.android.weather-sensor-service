@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -36,7 +35,12 @@ hs_err_pid*
 # Ignore bin files 
 lib/bin 
 # Ignore Gradle build output directory
-build
-
+/build
+classes
+kotlin
+reports
+test-results
+tmp
+gradle
 # Ignore DS_Store
 .DS_Store
